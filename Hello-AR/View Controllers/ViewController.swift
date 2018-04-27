@@ -12,20 +12,37 @@ import ARKit
 
 class ViewController: UIViewController, ARSCNViewDelegate {
 
-    @IBOutlet var sceneView: ARSCNView!
+    var sceneView: ARSCNView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        // Create new scene view
+        self.sceneView = ARSCNView(frame: self.view.frame)
+        self.view.addSubview(sceneView)
+
         // Set the view's delegate
         sceneView.delegate = self
-        
+
         // Show statistics such as fps and timing information
         sceneView.showsStatistics = true
-        
+
         // Create a new scene
-        let scene = SCNScene(named: "art.scnassets/ship.scn")!
-        
+
+        let scene = SCNScene()
+
+        // Create 3D box
+        let box = SCNBox(width: 0.2, height: 0.2, length: 0.2, chamferRadius: 0)
+        let boxMaterial = SCNMaterial()
+        boxMaterial.diffuse.contents = UIColor.red
+
+        // Create a node
+        let boxNode = SCNNode()
+        boxNode.geometry = box
+        boxNode.geometry?.materials = [boxMaterial]
+        boxNode.position = SCNVector3(0, 0.1, -0.5)
+
+        scene.rootNode.addChildNode(boxNode)
         // Set the scene to the view
         sceneView.scene = scene
     }
